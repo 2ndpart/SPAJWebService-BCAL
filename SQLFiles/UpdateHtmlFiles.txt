@@ -1,0 +1,3 @@
+﻿SET Base64File=@Base64File,
+DateModified = GETDATE()
+WHERE Filename=@Filename

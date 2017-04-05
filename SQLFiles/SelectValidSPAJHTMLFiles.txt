@@ -1,0 +1,1 @@
+﻿SELECT ID, SPAJId, FolderName, FileName, FileNameIndo, Status, SPAJSection, ValidDate, DateCreated FROM SPAJHTML_Form WHERE Status = 'A'

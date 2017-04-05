@@ -1,0 +1,1 @@
+﻿SELECT FolderName, FileName, Base64File FROM HtmlForm WHERE Status = 'A' AND FileName = @FileName

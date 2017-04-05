@@ -1,0 +1,1 @@
+﻿SELECT ID, CFFId, FolderName, FileNameIndo,FileName, Base64File, Status, CFFSection, ValidDate, DateCreated FROM HtmlForm WHERE Status = 'A'

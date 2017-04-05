@@ -1,0 +1,1 @@
+﻿SELECT FolderName, FileName, Base64File FROM SPAJHTML_Form WHERE Status = 'A' AND FileName = @FileName

@@ -1,0 +1,474 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Quesioner</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <link rel="stylesheet" href="../jqueryLibrary/jquery.mobile-1.4.5.min.css">
+    <script type='text/javascript' src="../jqueryLibrary/jquery-1.11.1.min.js"></script>
+    <script type='text/javascript' src="../jqueryLibrary/jquery.mobile-1.4.5.min.js"></script>
+    <script type='text/javascript' src="../jqueryLibrary/jquery.validate.min.js"></script>
+
+<script type='text/javascript'>
+
+__functionIndexMap = {};
+<!-- core wrapper to client -->
+function calliOSFunction(functionName, successCallback, errorCallback, callInfo)
+{
+    var url = 'js-frame:';
+callInfo.functionname = functionName;
+if (successCallback)
+{
+if (typeof successCallback == 'function')
+{
+var callbackFuncName = createCallbackFunction(functionName + '_' + 'successCallback', successCallback);
+callInfo.success = callbackFuncName;
+}
+else
+callInfo.success = successCallback;
+}
+if (errorCallback)
+{
+if (typeof errorCallback == 'function')
+{
+var callbackFuncName = createCallbackFunction(functionName + '_' + 'errorCallback', errorCallback);
+callInfo.error = callbackFuncName;
+}
+else
+callInfo.error = errorCallback;
+}
+url += JSON.stringify(callInfo);
+var iFrame = createIFrame(url);
+//remove the frame now
+iFrame.parentNode.removeChild(iFrame);
+}
+function createCallbackFunction (funcName, callbackFunc)
+{
+if (callbackFunc && callbackFunc.name != null && callbackFunc.name.length > 0)
+{
+return callbackFunc.name;
+}
+if (typeof window[funcName+0] != 'function')
+{
+window[funcName+0] = callbackFunc;
+__functionIndexMap[funcName] = 0;
+return funcName+0
+} else
+{
+var maxIndex = __functionIndexMap[funcName];
+var callbackFuncStr = callbackFunc.toString();
+for (var i = 0; i <= maxIndex; i++)
+{
+var tmpName = funcName + i;
+if (window[tmpName].toString() == callbackFuncStr)
+return tmpName;
+}
+var newIndex = ++__functionIndexMap[funcName];
+window[funcName+newIndex] = callbackFunc;
+return funcName+newIndex;
+}
+}
+function createIFrame(src)
+{
+var rootElm = document.documentElement;
+var newFrameElm = document.createElement('IFRAME');
+newFrameElm.setAttribute('src',src);
+rootElm.appendChild(newFrameElm);
+return newFrameElm;
+}
+function onSuccess (ret)
+{
+if (ret)
+{
+var returnRet = JSON.parse(ret);
+
+theTypeIs = Object.keys(returnRet.result)[0];
+
+if (theTypeIs == 'readFromDB')
+{
+$("#SelectID0").val(returnRet.result.readFromDB[0].Value).slider('refresh');
+$("#SelectID1").val(returnRet.result.readFromDB[1].Value).slider('refresh');
+$("#SelectID2").val(returnRet.result.readFromDB[2].Value).slider('refresh');
+$("#SelectID3").val(returnRet.result.readFromDB[3].Value).slider('refresh');
+$("#SelectID4").val(returnRet.result.readFromDB[4].Value).slider('refresh');
+$("#SelectID5").val(returnRet.result.readFromDB[5].Value).slider('refresh');
+$("#SelectID6").val(returnRet.result.readFromDB[6].Value).slider('refresh');
+$("#SelectID7").val(returnRet.result.readFromDB[7].Value).slider('refresh');
+$("#SelectID8").val(returnRet.result.readFromDB[8].Value).slider('refresh');
+$("#SelectID9").val(returnRet.result.readFromDB[9].Value).slider('refresh');
+$("#SelectID10").val(returnRet.result.readFromDB[10].Value).slider('refresh');
+$("#SelectID11").val(returnRet.result.readFromDB[11].Value).slider('refresh');
+$("#SelectID12").val(returnRet.result.readFromDB[12].Value).slider('refresh');
+$("#SelectID13").val(returnRet.result.readFromDB[13].Value).slider('refresh');
+}
+}
+}
+function onError (ret)
+{
+if (ret)
+{
+var returnRet = JSON.parse(ret);
+alert(returnRet.error);
+}
+}
+function readfromDB() {
+var callInfo = {};
+callInfo.data = {};
+callInfo.data.CFFAnswers = {};
+callInfo.data.CFFAnswers.columns = 'elementID,Value,CFFID,CustomerID';
+callInfo.data.CFFAnswers.where = '';
+calliOSFunction('readfromDB:',onSuccess,onError, callInfo);
+
+/*var text = '{"result":{"readFromDB":[{"elementID":"SelectID0","CFFID":"1","CustomerID":"1","Value":"Y"},{"elementID":"SelectID1","CFFID":"1","CustomerID":"1","Value":"Y"},{"elementID":"SelectID2","CFFID":"1","CustomerID":"1","Value":"Y"},{"elementID":"SelectID3","CFFID":"1","CustomerID":"1","Value":"T"},{"elementID":"SelectID4","CFFID":"1","CustomerID":"1","Value":"T"},{"elementID":"SelectID5","CFFID":"1","CustomerID":"1","Value":"T"},{"elementID":"SelectID6","CFFID":"1","CustomerID":"1","Value":"T"},{"elementID":"SelectID7","CFFID":"1","CustomerID":"1","Value":"T"},{"elementID":"SelectID8","CFFID":"1","CustomerID":"1","Value":"T"},{"elementID":"SelectID9","CFFID":"1","CustomerID":"1","Value":"T"},{"elementID":"SelectID10","CFFID":"1","CustomerID":"1","Value":"T"},{"elementID":"SelectID11","CFFID":"1","CustomerID":"1","Value":"T"},{"elementID":"SelectID12","CFFID":"1","CustomerID":"1","Value":"T"},{"elementID":"SelectID13","CFFID":"1","CustomerID":"1","Value":"T"}]}}'
+
+var obj = JSON.parse(text);
+
+theTypeIs = Object.keys(obj.result)[0];
+
+if (theTypeIs == 'readFromDB')
+{
+    $("#SelectID0").val(obj.result.readFromDB[0].Value).slider('refresh');
+    $("#SelectID1").val(obj.result.readFromDB[1].Value).slider('refresh');
+    $("#SelectID2").val(obj.result.readFromDB[2].Value).slider('refresh');
+    $("#SelectID3").val(obj.result.readFromDB[3].Value).slider('refresh');
+    $("#SelectID4").val(obj.result.readFromDB[4].Value).slider('refresh');
+    $("#SelectID5").val(obj.result.readFromDB[5].Value).slider('refresh');
+    $("#SelectID6").val(obj.result.readFromDB[6].Value).slider('refresh');
+    $("#SelectID7").val(obj.result.readFromDB[7].Value).slider('refresh');
+    $("#SelectID8").val(obj.result.readFromDB[8].Value).slider('refresh');
+    $("#SelectID9").val(obj.result.readFromDB[9].Value).slider('refresh');
+    $("#SelectID10").val(obj.result.readFromDB[10].Value).slider('refresh');
+    $("#SelectID11").val(obj.result.readFromDB[11].Value).slider('refresh');
+    $("#SelectID12").val(obj.result.readFromDB[12].Value).slider('refresh');
+    $("#SelectID13").val(obj.result.readFromDB[13].Value).slider('refresh');
+}
+else
+{
+    alert('bukan')
+}*/
+}
+function savetoDB() {
+//we fill up the parameters here
+var callInfo = {};
+callInfo.data = {};
+callInfo.data.CFFAnswers = [{},{},{},{},{},{},{},{},{},{},{},{},{},{}];
+//if the table inserted is same with multiple rows.
+//treat the data as array
+callInfo.data.CFFAnswers[0].elementID = 'SelectID0';
+callInfo.data.CFFAnswers[0].Value = $('#SelectID0 :selected').val();
+callInfo.data.CFFAnswers[0].CFFID = '1';
+callInfo.data.CFFAnswers[0].CustomerID = '1';
+
+callInfo.data.CFFAnswers[0].elementID = 'SelectID0';
+callInfo.data.CFFAnswers[0].Value = $('#SelectID0 :selected').val();
+callInfo.data.CFFAnswers[0].CFFID = '1';
+callInfo.data.CFFAnswers[0].CustomerID = '1';
+
+callInfo.data.CFFAnswers[0].elementID = 'SelectID0';
+callInfo.data.CFFAnswers[0].Value = $('#SelectID0 :selected').val();
+callInfo.data.CFFAnswers[0].CFFID = '1';
+callInfo.data.CFFAnswers[0].CustomerID = '1';
+
+callInfo.data.CFFAnswers[1].elementID = 'SelectID1';
+callInfo.data.CFFAnswers[1].Value = $('#SelectID1 :selected').val();
+callInfo.data.CFFAnswers[1].CFFID = '1';
+callInfo.data.CFFAnswers[1].CustomerID = '1';
+
+callInfo.data.CFFAnswers[2].elementID = 'SelectID2';
+callInfo.data.CFFAnswers[2].Value = $('#SelectID2 :selected').val();
+callInfo.data.CFFAnswers[2].CFFID = '1';
+callInfo.data.CFFAnswers[2].CustomerID = '1';
+
+callInfo.data.CFFAnswers[3].elementID = 'SelectID3';
+callInfo.data.CFFAnswers[3].Value = $('#SelectID3 :selected').val();
+callInfo.data.CFFAnswers[3].CFFID = '1';
+callInfo.data.CFFAnswers[3].CustomerID = '1';
+
+callInfo.data.CFFAnswers[4].elementID = 'SelectID4';
+callInfo.data.CFFAnswers[4].Value = $('#SelectID4 :selected').val();
+callInfo.data.CFFAnswers[4].CFFID = '1';
+callInfo.data.CFFAnswers[4].CustomerID = '1';
+
+callInfo.data.CFFAnswers[5].elementID = 'SelectID5';
+callInfo.data.CFFAnswers[5].Value = $('#SelectID5 :selected').val();
+callInfo.data.CFFAnswers[5].CFFID = '1';
+callInfo.data.CFFAnswers[5].CustomerID = '1';
+
+callInfo.data.CFFAnswers[6].elementID = 'SelectID6';
+callInfo.data.CFFAnswers[6].Value = $('#SelectID6 :selected').val();
+callInfo.data.CFFAnswers[6].CFFID = '1';
+callInfo.data.CFFAnswers[6].CustomerID = '1';
+
+callInfo.data.CFFAnswers[7].elementID = 'SelectID7';
+callInfo.data.CFFAnswers[7].Value = $('#SelectID6 :selected').val();
+callInfo.data.CFFAnswers[7].CFFID = '1';
+callInfo.data.CFFAnswers[7].CustomerID = '1';
+
+callInfo.data.CFFAnswers[8].elementID = 'SelectID8';
+callInfo.data.CFFAnswers[8].Value = $('#SelectID7 :selected').val();
+callInfo.data.CFFAnswers[8].CFFID = '1';
+callInfo.data.CFFAnswers[8].CustomerID = '1';
+
+callInfo.data.CFFAnswers[9].elementID = 'SelectID9';
+callInfo.data.CFFAnswers[9].Value = $('#SelectID8 :selected').val();
+callInfo.data.CFFAnswers[9].CFFID = '1';
+callInfo.data.CFFAnswers[9].CustomerID = '1';
+
+callInfo.data.CFFAnswers[10].elementID = 'SelectID10';
+callInfo.data.CFFAnswers[10].Value = $('#SelectID9 :selected').val();
+callInfo.data.CFFAnswers[10].CFFID = '1';
+callInfo.data.CFFAnswers[10].CustomerID = '1';
+
+callInfo.data.CFFAnswers[11].elementID = 'SelectID11';
+callInfo.data.CFFAnswers[11].Value = $('#SelectID10 :selected').val();
+callInfo.data.CFFAnswers[11].CFFID = '1';
+callInfo.data.CFFAnswers[11].CustomerID = '1';
+
+callInfo.data.CFFAnswers[12].elementID = 'SelectID12';
+callInfo.data.CFFAnswers[12].Value = $('#SelectID11 :selected').val();
+callInfo.data.CFFAnswers[12].CFFID = '1';
+callInfo.data.CFFAnswers[12].CustomerID = '1';
+
+callInfo.data.CFFAnswers[13].elementID = 'SelectID13';
+callInfo.data.CFFAnswers[13].Value = $('#SelectID12 :selected').val();
+callInfo.data.CFFAnswers[13].CFFID = '1';
+callInfo.data.CFFAnswers[13].CustomerID = '1';
+
+//call the wrapper with the parameterized info
+calliOSFunction('savetoDB:',onSuccess,onError, callInfo);
+console.log(JSON.stringify(callInfo));
+}
+function PrintData()
+{
+    savetoDB();
+}
+function ReadData()
+{
+readfromDB();
+}
+</script>
+
+<style>
+@font-face 
+{
+    /* ttf, otf, svz, woff, wot */
+    font-family: 'BPreplay_Regular';
+    src: url('../jqueryLibrary/BPreplay.eot'); /* IE9 Compat Modes */
+    src: url('../jqueryLibrary/BPreplay.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../jqueryLibrary/BPreplay.woff2') format('woff2'), /* Super Modern Browsers */
+    url('../jqueryLibrary/BPreplay.woff') format('woff'), /* Pretty Modern Browsers */
+    url('../jqueryLibrary/BPreplay.ttf')  format('truetype'), /* Safari, Android, iOS */
+    url('../jqueryLibrary/BPreplay.svg#BPreplay') format('svg'); /* Legacy iOS */
+}
+    
+body
+{
+    font-family: 'BPreplay_Regular'; 
+}    
+
+label.error {
+color: red;
+font-size: 16px;
+font-weight: normal;
+line-height: 1.4;
+margin-top: 0.5em;
+width: 100%;
+float: none;
+}
+@media screen and (orientation: portrait) {
+label.error {
+margin-left: 0;
+display: block;
+}
+}
+@media screen and (orientation: landscape) {
+label.error {
+display: inline-block;
+margin-left: 0%;
+}
+}
+em {
+color: red;
+font-weight: bold;
+padding-right: .25em;
+}  
+</style>
+</head>
+<body>
+<div id='page1' data-role='page'>
+<div data-role='content'>
+<form id='myform'>
+<div data-role='main' class='ui-content'>
+<table data-role="table" class="ui-responsive table-stroke">
+     <thead>
+       <tr style="background-color: #f2f3f2; color: #006683;" >
+         <th data-priority="2"></th>
+         <th>KEBUTUHAN</th>
+         <th data-priority="3">SUDAH PUNYA</th>
+         <th data-priority="1">BERENCANA PUNYA</th>
+         <th data-priority="5">PRIORITAS</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr>
+         <th>1</th>
+         <td>Proteksi Pribadi<br />
+             (Proteksi Jiwa, Cacat Tetap Total, dan Penyakit Kritis)<br />
+             Proteksi Pasangan<br />
+             (Proteksi Jiwa, Cacat Tetap Total, dan Penyakit Kritis)<br />
+             Proteksi Anak<br />
+             (Proteksi Jiwa, Cacat Tetap Total, dan Penyakit Kritis)</td>
+         <td>            
+             <select id="SelectID0" name="flip-2" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select><br />
+             <select id="SelectID1" name="flip-3" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select><br />
+             <select id="SelectID2" name="flip-4" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select><br />             
+             </td>
+         <td>            
+             <select id="SelectID3" name="flip-5" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select><br />
+             <select id="SelectID4" name="flip-6" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select><br />
+             <select id="SelectID5" name="flip-7" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select></td>
+         <td>1<br />
+             <br />
+             2<br />
+             <br />
+             3</td>
+       </tr>
+       <tr>
+         <th>2</th>
+         <td>Pensiun</td>
+         <td align="center">
+             <select id="SelectID6" name="flip-8" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select></td>
+         <td align="center">
+             <select id="SelectID7" name="flip-9" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select></td>
+         <td>4</td>
+       </tr>
+       <tr>
+         <th>3</th>
+         <td>Pendidikan Anak</td>
+         <td align="center">
+             <select id="SelectID8" name="flip-10" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select></td>
+         <td align="center">
+             <select id="SelectID9" name="flip-11" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select></td>
+         <td>5</td>
+       </tr>
+       <tr>
+         <th>4</th>
+         <td>Warisan</td>
+         <td align="center">
+             <select id="SelectID10" name="flip-12" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select></td>
+         <td align="center">
+             <select id="SelectID11" name="flip-13" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select></td>
+         <td>6</td>
+       </tr>
+       <tr>
+         <th>5</th>
+         <td>Investasi</td>
+         <td align="center">
+             <select id="SelectID12" name="flip-14" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select></td>
+         <td align="center">
+             <select id="SelectID13" name="flip-15" data-role="slider" data-mini="true">
+        <option value="Y">Ya</option>
+        <option value="T">Tidak</option>
+    </select></td>
+         <td>7</td>
+       </tr>      
+     </tbody>
+   </table>
+
+<div style="display: none;"><button class="ui-btn ui-btn-inline" id="save">Save</button>
+    <button class="ui-btn ui-btn-inline" id="read">Read</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+<script>
+$(document).ready(function () {
+$.validator.addMethod('valueNotEquals', function(value, element, arg){
+return arg != value;
+}, 'Value must not equal arg.');
+$('#myform').validate({ // initialize the plugin
+rules: {
+TextName0: {
+required: true,
+},
+RangeName1: {
+required: true,
+range: [5, 50]
+},
+CheckBoxName3:{required:true,'minlength':2},
+ SelectName4 : { valueNotEquals: 'Choose' },
+},
+messages:
+{
+CheckBoxName3:
+{
+minlength:'Please select at least {0} options'
+},
+    SelectName4: { valueNotEquals: 'Please select an item!' },
+},
+errorPlacement: function( error, element ) {
+if ( element.is(':checkbox') ) 
+    {
+        error.appendTo( element.parents('.container') );
+    }
+else
+{
+error.insertAfter( element.parent() );
+}
+}
+})
+$('#save').click(function(e) {
+e.preventDefault();
+PrintData();
+$('#myform')[0].reset();
+} 
+);
+$('#read').click(function(e) {
+e.preventDefault();
+ReadData();
+});
+});
+</script>
+</body>
+</html>

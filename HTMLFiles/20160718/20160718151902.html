@@ -1,0 +1,616 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Quesioner</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+
+<link rel="stylesheet" href="../jqueryLibrary/jquery.mobile-1.4.5.min.css">
+<script type='text/javascript' src="../jqueryLibrary/jquery-1.11.1.min.js"></script>
+<script type='text/javascript' src="../jqueryLibrary/jquery.mobile-1.4.5.min.js"></script>
+<script type='text/javascript' src="../jqueryLibrary/jquery.validate.min.js"></script>
+
+<script type='text/javascript'>
+$( document ).ready(function() {    
+    defaultTotalSkor();
+
+    $('input:radio[name=radiochoice1]').change(function() {        
+        calculateTotalSkor();                    
+    });
+
+    $('input:radio[name=radiochoice2]').change(function() {        
+        calculateTotalSkor();            
+    });
+
+    $('input:radio[name=radiochoice3]').change(function() {        
+        calculateTotalSkor();            
+    });
+
+    $('input:radio[name=radiochoice4]').change(function() {        
+        calculateTotalSkor();            
+    });
+
+    $('input:radio[name=radiochoice5]').change(function() {        
+        calculateTotalSkor();            
+    });
+});
+
+function defaultTotalSkor()
+{
+    var totalSkor = 0;                    
+    
+    $('.replacement').html(totalSkor);
+    
+    setCSSTotalSkor(totalSkor);      
+}
+
+function calculateTotalSkor()
+{
+    var totalSkor = 0;        
+        
+    var radiochoice1 = 'radiochoice1';
+    var radiochoice2 = 'radiochoice2';
+    var radiochoice3 = 'radiochoice3';
+    var radiochoice4 = 'radiochoice4';
+    var radiochoice5 = 'radiochoice5';
+        
+    if ($('input[name=' + radiochoice1 + ']').is(':checked'))
+    {
+        var radioSkor1 = $("input[name='radiochoice1']:checked").val();    
+    }
+    else
+    {
+        radioSkor1 = 0;
+    }   
+    
+    if ($('input[name=' + radiochoice2 + ']').is(':checked'))
+    {
+        var radioSkor2 = $("input[name='radiochoice2']:checked").val();    
+    }
+    else
+    {
+        radioSkor2 = 0;
+    }  
+    
+    if ($('input[name=' + radiochoice3 + ']').is(':checked'))
+    {
+        var radioSkor3 = $("input[name='radiochoice3']:checked").val();    
+    }
+    else
+    {
+        radioSkor3 = 0;    
+    }  
+    
+    if ($('input[name=' + radiochoice4 + ']').is(':checked'))
+    {
+        var radioSkor4 = $("input[name='radiochoice4']:checked").val();    
+    }
+    else
+    {
+        radioSkor4 = 0;    
+    }
+    
+    if ($('input[name=' + radiochoice5 + ']').is(':checked'))
+    {
+        var radioSkor5 = $("input[name='radiochoice5']:checked").val();    
+    }
+    else
+    {
+        radioSkor5 = 0;    
+    }        
+
+    totalSkor = parseInt(radioSkor1) + parseInt(radioSkor2) + parseInt(radioSkor3) + parseInt(radioSkor4) + parseInt(radioSkor5);  
+
+    $('.replacement').html(totalSkor);
+    
+    setCSSTotalSkor(totalSkor);  
+}
+
+function setCSSTotalSkor(totalSkor)
+{   
+   
+   if (totalSkor == 0)
+   {
+        // TANPA STYLE DI TD NYA
+   }  
+   else if (totalSkor < 28)
+   {
+        $('.konservatif').css({'background-color': '#006683', 'color': 'white'});  
+        $('.moderat').removeAttr('style');
+        $('.agresif').removeAttr('style');       
+   }   
+   else if(totalSkor > 28 && totalSkor < 40 )
+   {
+        $('.moderat').css({'background-color': '#006683', 'color': 'white'}); 
+        $('.konservatif').removeAttr('style');
+        $('.agresif').removeAttr('style');
+   }
+   else if(totalSkor > 40)
+   {
+        $('.agresif').css({'background-color': '#006683', 'color': 'white'});
+        $('.konservatif').removeAttr('style');
+        $('.moderat').removeAttr('style'); 
+   }
+   else
+   {
+        //DO NOTHING
+   }
+}
+
+__functionIndexMap = {};
+<!-- core wrapper to client -->
+function calliOSFunction(functionName, successCallback, errorCallback, callInfo)
+{
+    var url = 'js-frame:';
+callInfo.functionname = functionName;
+if (successCallback)
+{
+if (typeof successCallback == 'function')
+{
+var callbackFuncName = createCallbackFunction(functionName + '_' + 'successCallback', successCallback);
+callInfo.success = callbackFuncName;
+}
+else
+callInfo.success = successCallback;
+}
+if (errorCallback)
+{
+if (typeof errorCallback == 'function')
+{
+var callbackFuncName = createCallbackFunction(functionName + '_' + 'errorCallback', errorCallback);
+callInfo.error = callbackFuncName;
+}
+else
+callInfo.error = errorCallback;
+}
+url += JSON.stringify(callInfo);
+var iFrame = createIFrame(url);
+//remove the frame now
+iFrame.parentNode.removeChild(iFrame);
+}
+function createCallbackFunction (funcName, callbackFunc)
+{
+if (callbackFunc && callbackFunc.name != null && callbackFunc.name.length > 0)
+{
+return callbackFunc.name;
+}
+if (typeof window[funcName+0] != 'function')
+{
+window[funcName+0] = callbackFunc;
+__functionIndexMap[funcName] = 0;
+return funcName+0
+} else
+{
+var maxIndex = __functionIndexMap[funcName];
+var callbackFuncStr = callbackFunc.toString();
+for (var i = 0; i <= maxIndex; i++)
+{
+var tmpName = funcName + i;
+if (window[tmpName].toString() == callbackFuncStr)
+return tmpName;
+}
+var newIndex = ++__functionIndexMap[funcName];
+window[funcName+newIndex] = callbackFunc;
+return funcName+newIndex;
+}
+}
+function createIFrame(src)
+{
+var rootElm = document.documentElement;
+var newFrameElm = document.createElement('IFRAME');
+newFrameElm.setAttribute('src',src);
+rootElm.appendChild(newFrameElm);
+return newFrameElm;
+}
+function onSuccess (ret)
+{
+if (ret)
+{
+var returnRet = JSON.parse(ret);
+
+theTypeIs = Object.keys(returnRet.result)[0];
+
+if (theTypeIs == 'readFromDB')
+{
+    var radio = 'radio';
+
+    $('input[name=radio-choice-1][value=' + returnRet.result.readFromDB[0].Value + ']').attr('checked', true);
+    $('input[name=radio-choice-2][value=' + returnRet.result.readFromDB[1].Value + ']').attr('checked', true);
+    $('input[name=radio-choice-3][value=' + returnRet.result.readFromDB[2].Value + ']').attr('checked', true);
+    $('input[name=radio-choice-4][value=' + returnRet.result.readFromDB[3].Value + ']').attr('checked', true);
+    $('input[name=radio-choice-5][value=' + returnRet.result.readFromDB[4].Value + ']').attr('checked', true);
+
+    $('input[type='+ radio +']').checkboxradio('refresh');
+}
+}
+}
+function onError (ret)
+{
+if (ret)
+{
+var returnRet = JSON.parse(ret);
+alert(returnRet.error);
+}
+}
+function readfromDB() {
+var callInfo = {};
+callInfo.data = {};
+callInfo.data.CFFAnswers = {};
+callInfo.data.CFFAnswers.columns = 'elementID,Value,CFFID,CustomerID';
+callInfo.data.CFFAnswers.where = '';
+calliOSFunction('readfromDB:',onSuccess,onError, callInfo);
+
+/*var text = '{"result":{"readFromDB":[{"elementID":"radio-choice-1","Value":"10","CFFID":"1","CustomerID":"1"},{"elementID":"radio-choice-2","Value":"2","CFFID":"1","CustomerID":"1"},{"elementID":"radio-choice-3","Value":"2","CFFID":"1","CustomerID":"1"},{"elementID":"radio-choice-4","Value":"6","CFFID":"1","CustomerID":"1"},{"elementID":"radio-choice-5","Value":"2","CFFID":"1","CustomerID":"1"}]},"functionname":"savetoDB:","success":"onSuccess","error":"onError"}'
+
+var obj = JSON.parse(text);
+
+theTypeIs = Object.keys(obj.result)[0];
+
+var radio = 'radio';
+
+if (theTypeIs == 'readFromDB')
+{        
+    $('input[name=radio-choice-1][value=' + obj.result.readFromDB[0].Value + ']').attr('checked', true);
+    $('input[name=radio-choice-2][value=' + obj.result.readFromDB[1].Value + ']').attr('checked', true);
+    $('input[name=radio-choice-3][value=' + obj.result.readFromDB[2].Value + ']').attr('checked', true);
+    $('input[name=radio-choice-4][value=' + obj.result.readFromDB[3].Value + ']').attr('checked', true);
+    $('input[name=radio-choice-5][value=' + obj.result.readFromDB[4].Value + ']').attr('checked', true);
+
+    $('input[type='+ radio +']').checkboxradio('refresh');
+}
+else
+{
+    alert('bukan')
+}*/
+}
+function savetoDB() {
+//we fill up the parameters here
+var callInfo = {};
+callInfo.data = {};
+callInfo.data.CFFAnswers = [{},{},{},{},{}];
+//if the table inserted is same with multiple rows.
+//treat the data as array
+callInfo.data.CFFAnswers[0].elementID = 'radio-choice-1';
+callInfo.data.CFFAnswers[0].Value = $('input[name=radio-choice-1]:checked').val();
+callInfo.data.CFFAnswers[0].CFFID = '1';
+callInfo.data.CFFAnswers[0].CustomerID = '1';
+
+callInfo.data.CFFAnswers[1].elementID = 'radio-choice-2';
+callInfo.data.CFFAnswers[1].Value = $('input[name=radio-choice-2]:checked').val();
+callInfo.data.CFFAnswers[1].CFFID = '1';
+callInfo.data.CFFAnswers[1].CustomerID = '1';
+
+callInfo.data.CFFAnswers[2].elementID = 'radio-choice-3';
+callInfo.data.CFFAnswers[2].Value =  $('input[name=radio-choice-3]:checked').val();
+callInfo.data.CFFAnswers[2].CFFID = '1';
+callInfo.data.CFFAnswers[2].CustomerID = '1';
+
+callInfo.data.CFFAnswers[3].elementID = 'radio-choice-4';
+callInfo.data.CFFAnswers[3].Value =  $('input[name=radio-choice-4]:checked').val();
+callInfo.data.CFFAnswers[3].CFFID = '1';
+callInfo.data.CFFAnswers[3].CustomerID = '1';
+
+callInfo.data.CFFAnswers[4].elementID = 'radio-choice-5';
+callInfo.data.CFFAnswers[4].Value =  $('input[name=radio-choice-5]:checked').val();
+callInfo.data.CFFAnswers[4].CFFID = '1';
+callInfo.data.CFFAnswers[4].CustomerID = '1';
+
+//call the wrapper with the parameterized info
+calliOSFunction('savetoDB:',onSuccess,onError, callInfo);
+
+console.log(JSON.stringify(callInfo));
+}
+function PrintData()
+{
+    savetoDB();
+}
+function ReadData()
+{
+readfromDB();
+}
+</script>
+
+<style>
+  
+    
+label.error {
+color: red;
+font-size: 16px;
+font-weight: normal;
+line-height: 1.4;
+margin-top: 0.5em;
+width: 100%;
+float: none;
+}
+@media screen and (orientation: portrait) {
+label.error {
+margin-left: 0;
+display: block;
+}
+}
+@media screen and (orientation: landscape) {
+label.error {
+display: inline-block;
+margin-left: 0%;
+}
+}
+em {
+color: red;
+font-weight: bold;
+padding-right: .25em;
+}    
+    </style>
+</head>
+<body>
+<div id='page1' data-role='page'>
+<div data-role='content'>
+<form id='myform'>
+<div data-role='main' class='ui-content'>
+
+<table data-role="table" class="ui-responsive table-stroke">
+     <thead>
+       <tr style="background-color: #f2f3f2; color: #006683;" >
+         <th data-priority="2" class="style1"></th>
+         <th class="style1">RISK PROFILING QUESTIONAIRS</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr>
+         <th>1</th>
+         <td>Manakah dari keterangan dibawah ini yang sesuai dengan tahapan kehidupan Anda saat ini?<br />
+         <p class="container">                
+            <input type="radio" name="radiochoice1" id="radio1" value="2">
+            <label for="radio1">
+            Saya ingin  berinvestasi pada instrumen investasi yang  hampir tidak ada risiko penurunan Nilai investasi awal saya. Saya tidak siap menerima penurunan Nilai investasi dalam jangka pendek.
+            </label>
+            <input type="radio" name="radiochoice1" id="radio2" value="4">
+            <label for="radio2">
+            Saya ingin mempertahankan Nilai investasi awal saya, namun saya bersedia menerima sedikit penurunan Nilai investasi dalam jangka pendek. 
+            </label>
+            <input type="radio" name="radiochoice1" id="radio3" value="8">
+            <label for="radio3">
+            Saya mengharapkan Nilai investasi saya tumbuh dan memperoleh tingkat pengembalian yang tinggi. Saya dapat menerima kemungkinan penurunan Nilai investasi awal.
+            </label>
+            <input type="radio" name="radiochoice1" id="radio4" value="10">
+            <label for="radio4">
+            Saya mengharapkan Nilai investasi saya tumbuh sangat pesat dan memperoleh tingkat pengembalian yang sangat tinggi. Saya dapat menerima kemungkinan penurunan Nilai investasi atau kehilangan seluruh modal investasi awal.
+            </label>              
+        </p>
+        </td>        
+       </tr>
+       <tr>
+         <th>2</th>
+         <td>Nilai investasi Anda dapat berkurang karena fluktuasi pasar. Seberapa jauh penurunan investasi yang dapat Anda toleransi?<br />
+         <p class="container">              
+            <input type="radio" name="radiochoice2" id="radio5" value="2">
+            <label for="radio5">
+            Saya tidak bisa menerima penurunan sekecil apapun.
+            </label>
+            <input type="radio" name="radiochoice2" id="radio6" value="4">
+            <label for="radio6">
+            < 10%. 
+            </label>
+            <input type="radio" name="radiochoice2" id="radio7" value="6">
+            <label for="radio7">
+            10-30%
+            </label>
+            <input type="radio" name="radiochoice2" id="radio8" value="8">
+            <label for="radio8">
+            > 30-50%
+            </label>
+            <input type="radio" name="radiochoice2" id="radio9" value="10">
+            <label for="radio9">
+            > 50%
+            </label>        
+        </p>
+        </td>
+       </tr>
+       <tr>
+         <th>3</th>
+         <td>Jika Nilai Investasi Anda saat ini mengalami penurunan sebesar 10% dibandingkan Nilai Investasi Anda 6 bulan yang lalu, apakah yang Anda lakukan?
+         <p class="container">            
+            <input type="radio" name="radiochoice3" id="radio10" value="2">
+            <label for="radio10">
+            Segera mencairkan investasi karena saya tidak bisa menerima penurunan Nilai investasi awal.
+            </label>
+            <input type="radio" name="radiochoice3" id="radio11" value="4">
+            <label for="radio11">
+            Tidak akan melakukan pencairan, namun untuk selanjutnya akan lebih sering memantau pergerakan Nilai investasi saya. 
+            </label>
+            <input type="radio" name="radiochoice3" id="radio12" value="8">
+            <label for="radio12">
+            Tidak akan melakukan pencairan. Saya bisa menerima penurunan investasi dalam jangka pendek karena saya mempunyai tujuan investasi jangka panjang.
+            </label>
+            <input type="radio" name="radiochoice3" id="radio13" value="10">
+            <label for="radio13">
+            Akan menambah jumlah investasi saya. Penurunan Nilai investasi dalam jangka pendek tersebut adalah peluang saya untuk menambahkan Nilai investasi sehingga memperoleh hasil maksimal.
+            </label>
+        <p/>    
+         </td>
+       </tr>
+       <tr>
+         <th>4</th>
+          <td>Berapa lama Investasi yang akan Anda lakukan?
+          <p class="container">
+            <input type="radio" name="radiochoice4" id="radio14" value="6">
+            <label for="radio14">
+            7 s/d 10 tahun.
+            </label>
+            <input type="radio" name="radiochoice4" id="radio15" value="8">
+            <label for="radio15">
+            11 s/d 15 tahun
+            </label>
+            <input type="radio" name="radiochoice4" id="radio16" value="10">
+            <label for="radio16">
+            16 s/d 20 tahun
+            </label>           
+          </p>       
+          </td>
+       </tr>
+       <tr>
+         <th>5</th>
+         <td>Berapa lama Investasi yang akan Anda lakukan?
+         <p class="container">
+            <input type="radio" name="radiochoice5" id="radio17" value="2">
+            <label for="radio17">
+            Segera mencairkan investasi karena saya tidak bisa menerima penurunan Nilai investasi awal.
+            </label>
+            <input type="radio" name="radiochoice5" id="radio18" value="4">
+            <label for="radio18">
+            Saya tidak terlalu memahami produk Asuransi Jiwa Unit Link.. 
+            </label>
+            <input type="radio" name="radiochoice5" id="radio19" value="6">
+            <label for="radio19">
+            Saya memahami dan memiliki pengetahuan umum mengenai produk Asuransi Jiwa Unit Link.
+            </label>
+            <input type="radio" name="radiochoice5" id="radio20" value="8">
+            <label for="radio20">
+            Saya memahami produk Asuransi Jiwa Unit Link termasuk beberapa faktor yang mempengaruhi naik-turunnya Nilai investasi.
+            </label>
+         </p>
+         </td>
+       </tr>      
+     </tbody>
+   </table>   
+    <br />
+<div style="display: none;"><button class="ui-btn ui-btn-inline" id="save">Save</button>
+    <button class="ui-btn ui-btn-inline" id="read">Read</button>
+</div>
+<br />
+<table data-role="table" class="ui-responsive table-stroke">
+     <thead>
+       <tr> 
+         <th data-priority="2" colspan="2">INTERPRETASI NILAI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+             SKOR ANDA : <span class="replacement"></span></th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr>
+         <th>&nbsp;</th>
+         <td class="konservatif"><strong>Konservatif (Nilai &lt; 28)</strong><br />
+             Anda mengharapkan pertumbuhan nilai 
+             Investasi yang stabil dan penerimaan hasil investasi secara periodik. Anda<br />
+             hanya bersedia menoleransi risiko yang minimal dan cenderung akan melakukan 
+             pencarian dana Investasi Anda jika<br />
+             terjadi penurunan Nilai Investasi/kerugian</td>
+       </tr>
+       <tr>
+         <th>&nbsp;</th>
+         <td class="moderat"><strong>Moderat (Nilai 28-40)<br />
+             </strong>Anda berinvestasi dengan tujuan mendapatkan pendapatan secara periodik 
+             dan pertumbuhan modal dalam jangka
+             <br />
+             menengah sampai panjang. Anda dapat menerima resiko penurunan investasi dalam 
+             jangka pendek untuk<br />
+             memperoleh potensi pertumbuhan modal yang lebih tinggi dalam jangka menengah 
+             sampai panjang. </td>
+       </tr>
+       <tr>
+         <th>&nbsp;</th>
+         <td class="agresif"><strong>Agresif (Nilai &gt; 40)<br />
+             </strong>Anda bertujuan mengembangkan pokok investasi dalam jangka panjang 
+             dengan tingkat imbal hasil yang besar. Anda<br />
+             bersedia mengambil resiko yang lebih tinggi untuk memperoleh pertumbuhan nilai 
+             investasi yang lebih tinggi
+         </td>
+       </tr>
+     </tbody>
+   </table>
+   
+</div>
+</form>
+</div>
+</div>
+<script>
+$(document).ready(function () {
+$.validator.addMethod('valueNotEquals', function(value, element, arg){
+return arg != value;
+}, 'Value must not equal arg.');
+$('#myform').validate({ // initialize the plugin
+rules: {
+TextName0: {
+required: true,
+},
+RangeName1: {
+required: true,
+range: [5, 50]
+},
+radiochoice1: {
+required: true
+},
+radiochoice2: {
+required: true
+},
+radiochoice3: {
+required: true
+},
+radiochoice4: {
+required: true
+},
+radiochoice5: {
+required: true
+},
+CheckBoxName3:{required:true,'minlength':2},
+ SelectName4 : { valueNotEquals: 'Choose' },
+},
+messages:
+{
+    radiochoice1:
+      {
+        required:"Mohon pilih salahsatu."
+      },
+    radiochoice2:
+      {
+        required:"Mohon pilih salahsatu."
+      },
+    radiochoice3:
+      {
+        required:"Mohon pilih salahsatu."
+      },
+    radiochoice4:
+      {
+        required:"Mohon pilih salahsatu."
+      },
+    radiochoice5:
+      {
+        required:"Mohon pilih salahsatu."
+      },
+    CheckBoxName3:
+    {
+    minlength:'Please select at least {0} options'
+    },    
+    SelectName4: { valueNotEquals: 'Please select an item!' },
+},
+errorPlacement: function( error, element ) {
+if ( element.is(':checkbox') ) 
+    {
+        error.appendTo( element.parents('.container') );
+    }
+else if ( element.is(":radio") ) 
+        {
+            error.appendTo( element.parents('.container') );
+        }
+else
+{
+error.insertAfter( element.parent() );
+}
+}
+})
+$('#save').click(function(e) {
+if ($('#myform').valid()) {
+console.log('form is valid - not submitted');
+e.preventDefault();
+PrintData();
+$('#myform')[0].reset();
+} else {
+console.log('form is not valid');
+}
+});
+$('#read').click(function(e) {
+e.preventDefault();
+ReadData();
+});
+});
+</script>
+</body>
+</html>

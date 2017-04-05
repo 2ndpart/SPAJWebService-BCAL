@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://service.webservice.sinosoft.com" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://service.webservice.sinosoft.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://service.webservice.sinosoft.com">
+      <xsd:complexType name="ArrayOfBase64Binary">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="base64Binary" nillable="true" type="xsd:base64Binary" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="_SPAJToCore">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="tns:ArrayOfBase64Binary" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" nillable="true" type="tns:ArrayOfBase64Binary" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="tns:ArrayOfBase64Binary" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="tns:ArrayOfBase64Binary" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="_SPAJToCoreResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="_SPAJToCoreResponse">
+    <wsdl:part name="parameters" element="tns:_SPAJToCoreResponse" />
+  </wsdl:message>
+  <wsdl:message name="_SPAJToCoreRequest">
+    <wsdl:part name="parameters" element="tns:_SPAJToCore" />
+  </wsdl:message>
+  <wsdl:portType name="MPOSServicePortType">
+    <wsdl:operation name="_SPAJToCore">
+      <wsdl:input name="_SPAJToCoreRequest" message="tns:_SPAJToCoreRequest" />
+      <wsdl:output name="_SPAJToCoreResponse" message="tns:_SPAJToCoreResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MPOSServiceHttpBinding" type="tns:MPOSServicePortType">
+    <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="_SPAJToCore">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="_SPAJToCoreRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="_SPAJToCoreResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MPOSService">
+    <wsdl:port name="MPOSServiceHttpPort" binding="tns:MPOSServiceHttpBinding">
+      <wsdlsoap:address location="http://10.1.129.104:8082/bcal/services/MPOSService" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

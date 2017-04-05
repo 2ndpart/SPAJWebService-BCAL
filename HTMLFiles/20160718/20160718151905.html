@@ -1,0 +1,378 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Quesioner</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel="stylesheet" href="../jqueryLibrary/jquery.mobile-1.4.5.min.css">
+<script type='text/javascript' src="../jqueryLibrary/jquery-1.11.1.min.js"></script>
+<script type='text/javascript' src="../jqueryLibrary/jquery.mobile-1.4.5.min.js"></script>
+<script type='text/javascript' src="../jqueryLibrary/jquery.validate.min.js"></script>
+
+<script type='text/javascript'>
+
+__functionIndexMap = {};
+<!-- core wrapper to client -->
+function calliOSFunction(functionName, successCallback, errorCallback, callInfo)
+{
+    var url = 'js-frame:';
+callInfo.functionname = functionName;
+if (successCallback)
+{
+if (typeof successCallback == 'function')
+{
+var callbackFuncName = createCallbackFunction(functionName + '_' + 'successCallback', successCallback);
+callInfo.success = callbackFuncName;
+}
+else
+callInfo.success = successCallback;
+}
+if (errorCallback)
+{
+if (typeof errorCallback == 'function')
+{
+var callbackFuncName = createCallbackFunction(functionName + '_' + 'errorCallback', errorCallback);
+callInfo.error = callbackFuncName;
+}
+else
+callInfo.error = errorCallback;
+}
+url += JSON.stringify(callInfo);
+var iFrame = createIFrame(url);
+//remove the frame now
+iFrame.parentNode.removeChild(iFrame);
+}
+function createCallbackFunction (funcName, callbackFunc)
+{
+if (callbackFunc && callbackFunc.name != null && callbackFunc.name.length > 0)
+{
+return callbackFunc.name;
+}
+if (typeof window[funcName+0] != 'function')
+{
+window[funcName+0] = callbackFunc;
+__functionIndexMap[funcName] = 0;
+return funcName+0
+} else
+{
+var maxIndex = __functionIndexMap[funcName];
+var callbackFuncStr = callbackFunc.toString();
+for (var i = 0; i <= maxIndex; i++)
+{
+var tmpName = funcName + i;
+if (window[tmpName].toString() == callbackFuncStr)
+return tmpName;
+}
+var newIndex = ++__functionIndexMap[funcName];
+window[funcName+newIndex] = callbackFunc;
+return funcName+newIndex;
+}
+}
+function createIFrame(src)
+{
+var rootElm = document.documentElement;
+var newFrameElm = document.createElement('IFRAME');
+newFrameElm.setAttribute('src',src);
+rootElm.appendChild(newFrameElm);
+return newFrameElm;
+}
+function onSuccess (ret)
+{
+if (ret)
+{
+var returnRet = JSON.parse(ret);
+
+theTypeIs = Object.keys(returnRet.result)[0];
+
+if (theTypeIs == 'readFromDB')
+{
+$('#TextID0').val(returnRet.result.readFromDB[0].Value);
+$('#TextID1').val(returnRet.result.readFromDB[1].Value);
+$('#TextID2').val(returnRet.result.readFromDB[2].Value);
+$('#TextID3').val(returnRet.result.readFromDB[3].Value);
+$('#TextID4').val(returnRet.result.readFromDB[4].Value);
+$('#TextID5').val(returnRet.result.readFromDB[5].Value);
+$('#TextID6').val(returnRet.result.readFromDB[6].Value);
+$('#TextID7').val(returnRet.result.readFromDB[7].Value);
+$('#TextID8').val(returnRet.result.readFromDB[8].Value);
+$('#TextID9').val(returnRet.result.readFromDB[9].Value);
+$('#TextID10').val(returnRet.result.readFromDB[10].Value);
+$('#TextID11').val(returnRet.result.readFromDB[11].Value);
+$('#TextID12').val(returnRet.result.readFromDB[12].Value);
+}
+}
+}
+function onError (ret)
+{
+if (ret)
+{
+var returnRet = JSON.parse(ret);
+alert(returnRet.error);
+}
+}
+function readfromDB() {
+var callInfo = {};
+callInfo.data = {};
+callInfo.data.CFFAnswers = {};
+callInfo.data.CFFAnswers.columns = 'elementID,Value,CFFID,CustomerID';
+callInfo.data.CFFAnswers.where = '';
+calliOSFunction('readfromDB:',onSuccess,onError, callInfo);
+
+/*var text = '{"result":{"readFromDB":[{"elementID":"TextID0","Value":"3","CFFID":"1","CustomerID":"1"},{"elementID":"TextID1","Value":"5","CFFID":"1","CustomerID":"1"},{"elementID":"TextID2","Value":"","CFFID":"1","CustomerID":"1"},{"elementID":"TextID3","Value":"2","CFFID":"1","CustomerID":"1"},{"elementID":"TextID4","Value":"5","CFFID":"1","CustomerID":"1"},{"elementID":"TextID5","Value":"","CFFID":"1","CustomerID":"1"},{"elementID":"TextID6","Value":"6","CFFID":"1","CustomerID":"1"},{"elementID":"TextID7","Value":"7","CFFID":"1","CustomerID":"1"},{"elementID":"TextID8","Value":"","CFFID":"1","CustomerID":"1"},{"elementID":"TextID9","Value":"7","CFFID":"1","CustomerID":"1"},{"elementID":"TextID10","Value":"7","CFFID":"1","CustomerID":"1"},{"elementID":"TextID11","Value":"","CFFID":"1","CustomerID":"1"},{"elementID":"TextID12","Value":"112","CFFID":"1","CustomerID":"1"}]},"functionname":"savetoDB:","success":"onSuccess","error":"onError"}'
+
+var obj = JSON.parse(text);
+
+theTypeIs = Object.keys(obj.result)[0];
+
+if (theTypeIs == 'readFromDB')
+{
+    $('#TextID0').val(obj.result.readFromDB[0].Value);
+    $('#TextID1').val(obj.result.readFromDB[1].Value);
+    $('#TextID2').val(obj.result.readFromDB[2].Value);
+    $('#TextID3').val(obj.result.readFromDB[3].Value);
+    $('#TextID4').val(obj.result.readFromDB[4].Value);
+    $('#TextID5').val(obj.result.readFromDB[5].Value);
+    $('#TextID6').val(obj.result.readFromDB[6].Value);
+    $('#TextID7').val(obj.result.readFromDB[7].Value);
+    $('#TextID8').val(obj.result.readFromDB[8].Value);
+    $('#TextID9').val(obj.result.readFromDB[9].Value);
+    $('#TextID10').val(obj.result.readFromDB[10].Value);
+    $('#TextID11').val(obj.result.readFromDB[11].Value);
+    $('#TextID12').val(obj.result.readFromDB[12].Value);
+}
+else
+{
+    alert('bukan')
+}*/
+}
+function savetoDB() {
+//we fill up the parameters here
+var callInfo = {};
+callInfo.data = {};
+callInfo.data.CFFAnswers = [{},{},{},{},{},{},{},{},{},{},{},{},{}];
+//if the table inserted is same with multiple rows.
+//treat the data as array
+callInfo.data.CFFAnswers[0].elementID = 'TextID0';
+callInfo.data.CFFAnswers[0].Value = document.getElementsByName('TextName0')[0].value;
+callInfo.data.CFFAnswers[0].CFFID = '1';
+callInfo.data.CFFAnswers[0].CustomerID = '1';
+callInfo.data.CFFAnswers[1].elementID = 'TextID1';
+callInfo.data.CFFAnswers[1].Value = document.getElementsByName('TextName1')[0].value;
+callInfo.data.CFFAnswers[1].CFFID = '1';
+callInfo.data.CFFAnswers[1].CustomerID = '1';
+callInfo.data.CFFAnswers[2].elementID = 'TextID2';
+callInfo.data.CFFAnswers[2].Value = document.getElementsByName('TextName2')[0].value;
+callInfo.data.CFFAnswers[2].CFFID = '1';
+callInfo.data.CFFAnswers[2].CustomerID = '1';
+callInfo.data.CFFAnswers[3].elementID = 'TextID3';
+callInfo.data.CFFAnswers[3].Value = document.getElementsByName('TextName3')[0].value;
+callInfo.data.CFFAnswers[3].CFFID = '1';
+callInfo.data.CFFAnswers[3].CustomerID = '1';
+callInfo.data.CFFAnswers[4].elementID = 'TextID4';
+callInfo.data.CFFAnswers[4].Value = document.getElementsByName('TextName4')[0].value;
+callInfo.data.CFFAnswers[4].CFFID = '1';
+callInfo.data.CFFAnswers[4].CustomerID = '1';
+callInfo.data.CFFAnswers[5].elementID = 'TextID5';
+callInfo.data.CFFAnswers[5].Value = document.getElementsByName('TextName5')[0].value;
+callInfo.data.CFFAnswers[5].CFFID = '1';
+callInfo.data.CFFAnswers[5].CustomerID = '1';
+
+callInfo.data.CFFAnswers[6].elementID = 'TextID6';
+callInfo.data.CFFAnswers[6].Value = document.getElementsByName('TextName6')[0].value;
+callInfo.data.CFFAnswers[6].CFFID = '1';
+callInfo.data.CFFAnswers[6].CustomerID = '1';
+callInfo.data.CFFAnswers[7].elementID = 'TextID7';
+callInfo.data.CFFAnswers[7].Value = document.getElementsByName('TextName7')[0].value;
+callInfo.data.CFFAnswers[7].CFFID = '1';
+callInfo.data.CFFAnswers[7].CustomerID = '1';
+callInfo.data.CFFAnswers[8].elementID = 'TextID8';
+callInfo.data.CFFAnswers[8].Value = document.getElementsByName('TextName8')[0].value;
+callInfo.data.CFFAnswers[8].CFFID = '1';
+callInfo.data.CFFAnswers[8].CustomerID = '1';
+callInfo.data.CFFAnswers[9].elementID = 'TextID9';
+callInfo.data.CFFAnswers[9].Value = document.getElementsByName('TextName9')[0].value;
+callInfo.data.CFFAnswers[9].CFFID = '1';
+callInfo.data.CFFAnswers[9].CustomerID = '1';
+callInfo.data.CFFAnswers[10].elementID = 'TextID10';
+callInfo.data.CFFAnswers[10].Value = document.getElementsByName('TextName10')[0].value;
+callInfo.data.CFFAnswers[10].CFFID = '1';
+callInfo.data.CFFAnswers[10].CustomerID = '1';
+callInfo.data.CFFAnswers[11].elementID = 'TextID11';
+callInfo.data.CFFAnswers[11].Value = document.getElementsByName('TextName11')[0].value;
+callInfo.data.CFFAnswers[11].CFFID = '1';
+callInfo.data.CFFAnswers[11].CustomerID = '1';
+callInfo.data.CFFAnswers[12].elementID = 'TextID12';
+callInfo.data.CFFAnswers[12].Value = document.getElementsByName('TextName12')[0].value;
+callInfo.data.CFFAnswers[12].CFFID = '1';
+callInfo.data.CFFAnswers[12].CustomerID = '1';
+//call the wrapper with the parameterized info
+calliOSFunction('savetoDB:',onSuccess,onError, callInfo);
+console.log(JSON.stringify(callInfo));
+}
+function PrintData()
+{
+    savetoDB();
+}
+function ReadData()
+{
+readfromDB();
+}
+</script>
+
+<style>
+label.error {
+color: red;
+font-size: 16px;
+font-weight: normal;
+line-height: 1.4;
+margin-top: 0.5em;
+width: 100%;
+float: none;
+}
+@media screen and (orientation: portrait) {
+label.error {
+margin-left: 0;
+display: block;
+}
+}
+@media screen and (orientation: landscape) {
+label.error {
+display: inline-block;
+margin-left: 0%;
+}
+}
+em {
+color: red;
+font-weight: bold;
+padding-right: .25em;
+}    
+</style>
+</head>
+<body>
+<div id='page1' data-role='page'>
+<div data-role='content'>
+<form id='myform'>
+<div data-role='main' class='ui-content'>
+Pilih bila nasabah tidak mempunyai rencana asuransi
+<table data-role="table" class="ui-responsive table-stroke">
+     <thead>
+         <th data-priority="2"></th>
+         <th class="style7"></th>
+         <th data-priority="3">Nominal Saat ini</th>
+         <th data-priority="1" class="style3">Nominal yang dibutuhkan</th>
+         <th data-priority="5" class="style5">Selisih</th>
+       </tr>
+     </thead>
+     <tbody>
+         <tr>
+         <th class="style2">&nbsp;</th>
+         <td class="style8">Anak 1</td>
+         <td class="style2">            
+             <input id="TextID0" name="TextName0" type="text" /></td>
+         <td class="style4">            
+             <input id="TextID1" name="TextName1" type="text" /></td>
+         <td class="style6">
+             <input id="TextID2" name="TextName2" type="text" disabled/></td>
+         </tr>
+         <tr>
+         <th class="style2">&nbsp;</th>
+         <td class="style8">Anak 2</td>
+         <td class="style2">            
+             <input id="TextID3" name="TextName3" type="text" /></td>
+         <td class="style4">            
+             <input id="TextID4" name="TextName4" type="text" /></td>
+         <td class="style6">
+             <input id="TextID5" name="TextName5" type="text" disabled/></td>
+         </tr>
+         <tr>
+         <th class="style9"></th>
+         <td class="style9">Anak 3</td>
+         <td class="style9">            
+             <input id="TextID6" name="TextName6" type="text" /></td>
+         <td class="style10">            
+             <input id="TextID7" name="TextName7" type="text" /></td>
+         <td class="style11">
+             <input id="TextID8" name="TextName8" type="text" disabled/></td>
+         </tr>
+         <tr>
+         <th class="style2">&nbsp;</th>
+         <td class="style8">Anak 4</td>
+         <td class="style2">            
+             <input id="TextID9" name="TextName9" type="text" /></td>
+         <td class="style4">            
+             <input id="TextID10" name="TextName10" type="text" /></td>
+         <td class="style6">
+             <input id="TextID11" name="TextName11" type="text" disabled/></td>
+         </tr>
+         <tr>
+         <th class="style2">&nbsp;</th>
+         <td class="style8" colspan="4">Berapa jumlah pendapatan yang ingin dialokasikan 
+             untuk pendidikan anak per bulan ?</td>
+         </tr>
+         <tr>
+         <th class="style2">&nbsp;</th>
+         <td class="style8">Total Pendapatan Nasabah + Pasangan (Rp.)</td>
+         <td class="style2">            
+             <input id="TextID12" name="TextName12" type="text" /></td>
+         <td class="style4">            
+             &nbsp;</td>
+         <td class="style6">&nbsp;</td>
+         </tr>
+     </tbody>
+   </table>
+   <div style="display: none;"><button class="ui-btn ui-btn-inline" id="save">Save</button>
+    <button class="ui-btn ui-btn-inline" id="read">Read</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+<script>
+$(document).ready(function () {
+$.validator.addMethod('valueNotEquals', function(value, element, arg){
+return arg != value;
+}, 'Value must not equal arg.');
+$('#myform').validate({ // initialize the plugin
+rules: {
+TextName0: {
+required: true,
+},
+RangeName1: {
+required: true,
+range: [5, 50]
+},
+CheckBoxName3:{required:true,'minlength':2},
+ SelectName4 : { valueNotEquals: 'Choose' },
+},
+messages:
+{
+CheckBoxName3:
+{
+minlength:'Please select at least {0} options'
+},
+    SelectName4: { valueNotEquals: 'Please select an item!' },
+},
+errorPlacement: function( error, element ) {
+if ( element.is(':checkbox') ) 
+    {
+        error.appendTo( element.parents('.container') );
+    }
+else
+{
+error.insertAfter( element.parent() );
+}
+}
+})
+$('#save').click(function(e) {
+e.preventDefault();
+PrintData();
+$('#myform')[0].reset();
+});
+$('#read').click(function(e) {
+e.preventDefault();
+ReadData();
+});
+});
+</script>
+</body>
+</html>
