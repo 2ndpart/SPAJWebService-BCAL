@@ -48,6 +48,7 @@ namespace HtmlGeneratorServices.ServicesHelper
                     MailMessage message = new MailMessage(_MailSender, destination);
                     message.Subject = "Resubmit Files for SPAJ Number " + spajNumber;
                     message.Body = "This is the resubmitted file for SPAJ Number " + spajNumber + ". Please do not reply to this email. Any concern related with the file, please contact your system Administrator";
+                    message.IsBodyHtml = true;
                     smtpClient.Host = _SMTPServer;
                     smtpClient.EnableSsl = true;
                     NetworkCredential credential = new NetworkCredential(_SMTPUser, _SMTPPassword);
@@ -76,7 +77,8 @@ namespace HtmlGeneratorServices.ServicesHelper
                         message.CC.Add("js.regar@outlook.com");
                         message.CC.Add("ariani.pondaag@infoconnect.com.my");
                         message.CC.Add("infoipadair203@gmail.com");
-                        message.CC.Add("julius_luthena @bcalife.co.id");
+                        message.CC.Add("julius_luthena@bcalife.co.id");
+                        message.CC.Add("yohanes_tristian@bcalife.co.id");
                         smtpClient.Send(message);
                         LogWriter.WriteLog("Done Sending Email for " + spajNumber);
                         smtpClient.Dispose();
@@ -122,6 +124,7 @@ namespace HtmlGeneratorServices.ServicesHelper
                     MailMessage message = new MailMessage(_MailSender, destination);
                     message.Subject = "Files for SPAJ Number " + spajNumber;
                     message.Body = "This is the file related with SPAJ Number " + spajNumber + ". Please do not reply to this email. Any concern related with the file, please contact your system Administrator";
+                    message.IsBodyHtml = true;
                     smtpClient.Host = _SMTPServer;
                     smtpClient.EnableSsl = true;
                     NetworkCredential credential = new NetworkCredential(_SMTPUser, _SMTPPassword);
@@ -151,16 +154,17 @@ namespace HtmlGeneratorServices.ServicesHelper
                         message.CC.Add("ariani.pondaag@infoconnect.com.my");
                         message.CC.Add("infoipadair203@gmail.com");
                         message.CC.Add("julius_luthena @bcalife.co.id");
+                        message.CC.Add("yohanes_tristian@bcalife.co.id");
                         smtpClient.Send(message);
                         LogWriter.WriteLog("Done Sending Email for " + spajNumber);
                         smtpClient.Dispose();
                         message.Dispose();
 
                         //delete file after sending
-                        for (int i = 0; i < attachments.Count; i++)
-                        {
-                            File.Delete(attachments[i]);
-                        }
+                        //for (int i = 0; i < attachments.Count; i++)
+                        //{
+                        //    File.Delete(attachments[i]);
+                        //}
                     }
                     //break;
                 }
@@ -192,6 +196,7 @@ namespace HtmlGeneratorServices.ServicesHelper
                     MailMessage message = new MailMessage(_MailSender, destination);
                     message.Subject = "Files for SPAJ Number " + spajNumber;
                     message.Body = "This is the file related with SPAJ Number " + spajNumber + ". Please do not reply to this email. Any concern related with the file, please contact your system Administrator";
+                    message.IsBodyHtml = true;
                     smtpClient.Host = _SMTPServer;
                     smtpClient.EnableSsl = true;
                     NetworkCredential credential = new NetworkCredential(_SMTPUser, _SMTPPassword);
@@ -221,6 +226,7 @@ namespace HtmlGeneratorServices.ServicesHelper
                         message.CC.Add("ariani.pondaag@infoconnect.com.my");
                         message.CC.Add("infoipadair203@gmail.com");
                         message.CC.Add("julius_luthena @bcalife.co.id");
+                        message.CC.Add("yohanes_tristian@bcalife.co.id");
                         smtpClient.Send(message);
                         LogWriter.WriteLog("Done Sending Email for " + spajNumber);
                         smtpClient.Dispose();

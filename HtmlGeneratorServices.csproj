@@ -148,6 +148,7 @@
     <Compile Include="Models\SpajNumber_Agent.cs" />
     <Compile Include="Models\SPAJQueryResult.cs" />
     <Compile Include="Models\TestResult.cs" />
+    <Compile Include="ProductInformationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\SinosoftWS\Reference.cs">
       <AutoGen>True</AutoGen>

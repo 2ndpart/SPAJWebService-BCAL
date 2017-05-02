@@ -44,7 +44,7 @@ namespace HtmlGeneratorServices
             {
                 List<HtmlForm> myList = new List<HtmlForm>();
 
-                Database myDB = new Database("ConnStringProd");
+                Database myDB = new Database("ConnStringDev");
 
                 string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("SQLFiles", "SelectValidHtmlFiles.txt"));
 
@@ -81,6 +81,36 @@ namespace HtmlGeneratorServices
                 response.StatusDescription = ex.Message.Replace("\r\n", "");
                 return null;
             }
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            BodyStyle = WebMessageBodyStyle.WrappedRequest,
+            ResponseFormat = WebMessageFormat.Json
+         )]
+        public List<ProductInformationModel> getProductInformationData()
+        {
+            string[] files = Directory.GetFiles("C:\\inetpub\\wwwroot\\ProductInformation");
+            List<ProductInformationModel> returnVal = new List<ProductInformationModel>(); 
+            foreach (string fileName in files)
+            {
+                ProductInformationModel model = new ProductInformationModel();
+                FileInfo information = new FileInfo(fileName);
+                model.DateModified = information.CreationTime.ToShortDateString();
+                string[] splittedPath = information.FullName.Split('\\');
+                model.FilePath = splittedPath[splittedPath.Length - 2] + "/" + splittedPath[splittedPath.Length - 1];
+                model.FileSize = Convert.ToString(information.Length / 8);
+                if (information.Extension == ".pdf")
+                {
+                    model.FileType = "Brosur";
+                }
+                else if (information.Extension == ".mp4")
+                {
+                    model.FileType = "Video";
+                }
+                returnVal.Add(model);
+            }
+            return returnVal;
         }
 
         [OperationContract]
@@ -318,8 +348,7 @@ namespace HtmlGeneratorServices
             //var db = E_Submission.ESubmissionHelper.Database.GetPetaPocoDB();
             try
             {
-                string updateStatement = "UPDATE TBM_SPAJ_NUMBER SET Status = 'Resubmitted', SubmittedDate=@submittedDate, ProductName='" + producName + "', PolisOwner = '" + polisOwner + "'"
-                                         + " WHERE SPAJCode =" + spajNumber;
+                string updateStatement = "UPDATE TBM_SPAJ_NUMBER SET Status = 'Submitted', SubmittedDate=@submittedDate, ProductName='" + producName + "', PolisOwner = '" + polisOwner + "' WHERE SPAJCode =" + spajNumber;
                 SqlConnection conn = E_Submission.ESubmissionHelper.Database.GetSqlConnection();
                 conn.Open();
                 SqlCommand command = new SqlCommand(updateStatement, conn);

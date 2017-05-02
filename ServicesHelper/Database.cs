@@ -11,7 +11,7 @@ namespace E_Submission.ESubmissionHelper
     {
         public static SqlConnection GetSqlConnection()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["ConnStringProd"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["ConnStringDev"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
             return conn;
         }
@@ -26,7 +26,7 @@ namespace E_Submission.ESubmissionHelper
         }
         public static PetaPoco.Database GetPetaPocoDB()
         {
-            return new PetaPoco.Database("ConnStringProd");
+            return new PetaPoco.Database("ConnStringDev");
         }
     }
 }
